@@ -125,8 +125,8 @@ public class TruckPoolsActor : Actor, IRemindable, ITruckPoolsActor
             msg.TaskId, (CarryingTaskType)Int32.Parse(msg.TaskType), msg.TaskPriority,
             !String.IsNullOrEmpty(msg.PlanLoadingPosition) ? (TruckLoadingPosition)Int32.Parse(msg.PlanLoadingPosition) : null,
             msg.PlanContainerNumber, msg.PlanIsBigSize,
-            msg.LoadLocation, msg.LoadQueueNo, msg.LoadCraneNo,
-            msg.UnloadLocation, msg.UnloadQueueNo, msg.UnloadCraneNo, msg.NeedTwistLock,
+            msg.LoadLocation, msg.LoadQueueNo, msg.loadPlanTime, msg.LoadCraneNo,
+            msg.UnloadLocation, msg.UnloadQueueNo, msg.unloadPlanTime, msg.UnloadCraneNo, msg.NeedTwistLock,
             !String.IsNullOrEmpty(msg.QuayCraneProcess) ? (QuayCraneProcess)Int32.Parse(msg.QuayCraneProcess) : null));
         return Task.CompletedTask;
     }

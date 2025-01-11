@@ -62,6 +62,16 @@ public class CarryingTaskOrder : EntityBase<CarryingTaskOrder>
         get { return _loadUnloadQueueNo; }
     }
 
+    private readonly DateTime _loadUnloadPlanTime;
+
+    /// <summary>
+    /// 装卸计划时间
+    /// </summary>
+    public DateTime LoadUnloadPlanTime
+    {
+        get { return _loadUnloadPlanTime; }
+    }
+
     private readonly string? _craneNo;
 
     /// <summary>

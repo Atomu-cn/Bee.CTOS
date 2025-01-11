@@ -16,8 +16,8 @@ public class CarryingTask : EntityBase<CarryingTask>
     public static CarryingTask Create(string terminalNo, string truckPoolsNo,
         long taskId, CarryingTaskType taskType, int taskPriority, TruckLoadingPosition? planLoadingPosition,
         string containerNumber, bool isBigSize,
-        string loadLocation, long loadQueueNo, string? loadCraneNo,
-        string unloadLocation, long unloadQueueNo, string? unloadCraneNo, bool needTwistLock,
+        string loadLocation, long loadQueueNo, DateTime loadPlanTime, string? loadCraneNo,
+        string unloadLocation, long unloadQueueNo, DateTime unloadPlanTime, string? unloadCraneNo, bool needTwistLock,
         QuayCraneProcess? quayCraneProcess)
     {
         if (taskType == CarryingTaskType.Shift && quayCraneProcess != null)
@@ -43,6 +43,7 @@ public class CarryingTask : EntityBase<CarryingTask>
             CarryingTaskOrder.Set(p => p.OrderType, CarryingTaskOrderType.Load).
                 Set(p => p.LoadUnloadLocation, loadLocation).
                 Set(p => p.LoadUnloadQueueNo, loadQueueNo).
+                Set(p => p.LoadUnloadPlanTime, loadPlanTime).
                 Set(p => p.CraneNo, loadCraneNo).
                 Set(p => p.CraneType, taskType is CarryingTaskType.Discharge or CarryingTaskType.Transship ? CraneType.QuayCrane : CraneType.GantryCrane).
                 Set(p => p.QuayCraneProcess, taskType is CarryingTaskType.Discharge or CarryingTaskType.Transship ? quayCraneProcess : null).
@@ -51,6 +52,7 @@ public class CarryingTask : EntityBase<CarryingTask>
             CarryingTaskOrder.Set(p => p.OrderType, CarryingTaskOrderType.Unload).
                 Set(p => p.LoadUnloadLocation, unloadLocation).
                 Set(p => p.LoadUnloadQueueNo, unloadQueueNo).
+                Set(p => p.LoadUnloadPlanTime, unloadPlanTime).
                 Set(p => p.CraneNo, unloadCraneNo).
                 Set(p => p.CraneType, taskType is CarryingTaskType.Shipment or CarryingTaskType.Transship ? CraneType.QuayCrane : CraneType.GantryCrane).
                 Set(p => p.QuayCraneProcess, taskType is CarryingTaskType.Shipment or CarryingTaskType.Transship ? quayCraneProcess : null).
@@ -305,11 +307,12 @@ public class CarryingTask : EntityBase<CarryingTask>
     /// <summary>
     /// 变更装载指令
     /// </summary>
-    /// <param name="loadLocation">装卸位置</param>
-    /// <param name="loadQueueNo">装卸排队序号</param>
-    /// <param name="loadCraneNo">装卸机械号</param>
+    /// <param name="loadLocation">装载位置</param>
+    /// <param name="loadQueueNo">装载排队序号</param>
+    /// <param name="loadPlanTime">装载计划时间</param>
+    /// <param name="loadCraneNo">装载机械号</param>
     /// <param name="quayCraneProcess">岸桥工艺</param>
-    public void ChangeLoadOrder(string loadLocation, long loadQueueNo, string? loadCraneNo, QuayCraneProcess? quayCraneProcess)
+    public void ChangeLoadOrder(string loadLocation, long loadQueueNo, DateTime loadPlanTime, string? loadCraneNo, QuayCraneProcess? quayCraneProcess)
     {
         CarryingTaskOrder loadOrder = LoadOrder;
         if (loadOrder.Completed)
@@ -319,6 +322,7 @@ public class CarryingTask : EntityBase<CarryingTask>
             CarryingTaskOrder.Set(p => p.OrderType, CarryingTaskOrderType.Load).
                 Set(p => p.LoadUnloadLocation, loadLocation).
                 Set(p => p.LoadUnloadQueueNo, loadQueueNo).
+                Set(p => p.LoadUnloadPlanTime, loadPlanTime).
                 Set(p => p.CraneNo, loadCraneNo).
                 Set(p => p.CraneType, TaskType is CarryingTaskType.Discharge or CarryingTaskType.Transship ? CraneType.QuayCrane : CraneType.GantryCrane).
                 Set(p => p.QuayCraneProcess, TaskType is CarryingTaskType.Discharge or CarryingTaskType.Transship ? quayCraneProcess : null).
@@ -328,12 +332,13 @@ public class CarryingTask : EntityBase<CarryingTask>
     /// <summary>
     /// 变更卸载指令
     /// </summary>
-    /// <param name="unloadLocation">装卸位置</param>
-    /// <param name="unloadQueueNo">装卸排队序号</param>
-    /// <param name="unloadCraneNo">装卸机械号</param>
+    /// <param name="unloadLocation">卸载位置</param>
+    /// <param name="unloadQueueNo">卸载排队序号</param>
+    /// <param name="unloadPlanTime">卸载计划时间</param>
+    /// <param name="unloadCraneNo">卸载机械号</param>
     /// <param name="quayCraneProcess">岸桥工艺</param>
     /// <param name="needTwistLock">是否需要装卸锁钮</param>
-    public void ChangeUnloadOrder(string unloadLocation, long unloadQueueNo, string? unloadCraneNo, QuayCraneProcess? quayCraneProcess, bool needTwistLock)
+    public void ChangeUnloadOrder(string unloadLocation, long unloadQueueNo, DateTime unloadPlanTime, string? unloadCraneNo, QuayCraneProcess? quayCraneProcess, bool needTwistLock)
     {
         CarryingTaskOrder unloadOrder = UnloadOrder;
         if (unloadOrder.Executing)
@@ -345,6 +350,7 @@ public class CarryingTask : EntityBase<CarryingTask>
             CarryingTaskOrder.Set(p => p.OrderType, CarryingTaskOrderType.Unload).
                 Set(p => p.LoadUnloadLocation, unloadLocation).
                 Set(p => p.LoadUnloadQueueNo, unloadQueueNo).
+                Set(p => p.LoadUnloadPlanTime, unloadPlanTime).
                 Set(p => p.CraneNo, unloadCraneNo).
                 Set(p => p.CraneType, TaskType is CarryingTaskType.Shipment or CarryingTaskType.Transship ? CraneType.QuayCrane : CraneType.GantryCrane).
                 Set(p => p.QuayCraneProcess, TaskType is CarryingTaskType.Shipment or CarryingTaskType.Transship ? quayCraneProcess : null).

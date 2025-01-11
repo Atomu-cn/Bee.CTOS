@@ -17,9 +17,11 @@ public readonly record struct CarryingTask(
     [property: DataMember] bool PlanIsBigSize, //计划是大箱
     [property: DataMember] string LoadLocation, //装载位置（地图标记位置）
     [property: DataMember] long LoadQueueNo, //装载排队序号（同一装载位置需按序号排队，同号可交换）
+    [property: DataMember] DateTime loadPlanTime, //装载计划时间
     [property: DataMember] string? LoadCraneNo, //装载（载到集卡）机械号
     [property: DataMember] string UnloadLocation, //卸载位置（地图标记位置）
     [property: DataMember] long UnloadQueueNo, //卸载排队序号（同一装载位置需按序号排队，同号可交换）
+    [property: DataMember] DateTime unloadPlanTime, //卸载计划时间
     [property: DataMember] string? UnloadCraneNo, //卸载（卸下集卡）机械号
     [property: DataMember] bool NeedTwistLock, //是否需要扭锁（过锁钮站）
     [property: DataMember] string? QuayCraneProcess //岸桥工艺（可与 QuayCraneProcess 常数值互转）
