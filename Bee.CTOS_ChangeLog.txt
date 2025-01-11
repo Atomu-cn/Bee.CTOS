@@ -1,0 +1,10 @@
+Bee.CTOS
+Copyright © 2007, 2025 Bee Studio
+Container Terminal Operation System
+集装箱码头操作系统
+
+发布地址：https://github.com/lightspeed-max/Bee.CTOS
+
+
+20250111
+发布25年第一个版本

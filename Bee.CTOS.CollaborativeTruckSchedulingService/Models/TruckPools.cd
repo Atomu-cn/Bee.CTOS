@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="集卡池">
+    <Position X="2.733" Y="0.5" Height="0.75" Width="1.7" />
+  </Comment>
+  <Class Name="Bee.CTOS.CollaborativeTruckSchedulingService.Models.TruckPools">
+    <Position X="0.5" Y="0.5" Width="2" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAEMQAghBEAAgAAAAAAAAAAEAAAEAKAAgEQAA=</HashCode>
+      <FileName>Models\TruckPools.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Trucks" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Bee.CTOS.CollaborativeTruckSchedulingService.Models.TruckPoolsTruck">
+    <Position X="3.25" Y="1.75" Width="2" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAAAAAAAAAAAAAAAgAAAAAgAAAEBAA=</HashCode>
+      <FileName>Models\TruckPoolsTruck.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Microsoft YaHei UI" Size="9" />
+</ClassDiagram>
