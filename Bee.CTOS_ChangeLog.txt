@@ -1,5 +1,5 @@
 Bee.CTOS
-Copyright © 2007, 2025 Bee Studio
+Copyright © 2024, 2025 Lightspeed-max Studio
 Container Terminal Operation System
 集装箱码头操作系统
 

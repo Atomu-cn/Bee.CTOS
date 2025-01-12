@@ -364,10 +364,7 @@ FodyWeavers.xsd
 /ITOS.IGV.Plugin
 /Phenix.StorageAlgorithm
 /Phenix.StorageAlgorithm.Test
-/Phenix.iTOS.ContainerTerminalMonitoring
 /Bin_MsSQL
 /Bin_MySQL
 /Bin_ORA
 /Bin_PgSQL
-/Phenix.CTOS.ContainerTerminalMonitoring
-/Phenix.CTOS.TerminalMonitoringSystem
