@@ -109,7 +109,7 @@ public class TopologicalMap : EntityBase<TopologicalMap>
 
     private void ResetRelate(TopologicalMapLane lane)
     {
-        if ( _nodeDict != null)
+        if (_nodeDict != null)
             foreach (KeyValuePair<string, TopologicalMapNode> kvp in _nodeDict)
                 kvp.Value.ResetRelate(lane);
     }
@@ -209,6 +209,26 @@ public class TopologicalMap : EntityBase<TopologicalMap>
         }
 
         return false;
+    }
+
+    /// <summary>
+    /// 禁止通行
+    /// </summary>
+    /// <param name="laneNo">车道编号</param>
+    public void CloseLane(string laneNo)
+    {
+        if (LaneDict.TryGetValue(laneNo, out TopologicalMapLane? lane))
+            lane.Close();
+    }
+
+    /// <summary>
+    /// 恢复通行
+    /// </summary>
+    /// <param name="laneNo">车道编号</param>
+    public void OpenLane(string laneNo)
+    {
+        if (LaneDict.TryGetValue(laneNo, out TopologicalMapLane? lane))
+            lane.Open();
     }
 
     #endregion

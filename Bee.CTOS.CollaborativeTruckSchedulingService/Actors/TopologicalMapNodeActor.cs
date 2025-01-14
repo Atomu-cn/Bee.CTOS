@@ -5,12 +5,12 @@ using Bee.CTOS.CollaborativeTruckSchedulingService.Models;
 namespace Bee.CTOS.CollaborativeTruckSchedulingService.Actors;
 
 /// <summary>
-/// 拓扑地图交叉口
+/// 拓扑地图节点
 /// ID: $"{{\"TerminalNo\":\"{terminalNo}\",\"Location\":\"{location}\"}}"
 /// </summary>
-public class TopologicalMapJunctionActor : Actor, ITopologicalMapActor
+public class TopologicalMapNodeActor : Actor, ITopologicalMapActor
 {
-    public TopologicalMapJunctionActor(ActorHost host)
+    public TopologicalMapNodeActor(ActorHost host)
         : base(host)
     {
         dynamic? topologicalMapJunction = JsonConvert.DeserializeObject<dynamic>(this.Id.ToString());

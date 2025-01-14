@@ -12,13 +12,12 @@ public class TopologicalMapActor : Actor, ITopologicalMapActor
     public TopologicalMapActor(ActorHost host)
         : base(host)
     {
-        _terminalNo = this.Id.ToString();
-        _topologicalMap = TopologicalMap.FetchRoot(p => p.TerminalNo == _terminalNo) ?? TopologicalMap.Create(_terminalNo);
+        string terminalNo = this.Id.ToString();
+        _topologicalMap = TopologicalMap.FetchRoot(p => p.TerminalNo == terminalNo) ?? TopologicalMap.Create(terminalNo);
     }
 
     #region  Ù–‘
 
-    private readonly string _terminalNo;
     private readonly TopologicalMap _topologicalMap;
 
     #endregion
@@ -76,6 +75,18 @@ public class TopologicalMapActor : Actor, ITopologicalMapActor
     public Task<bool> DeleteLaneAsync(string laneNo)
     {
         return Task.FromResult(_topologicalMap.DeleteLane(laneNo));
+    }
+
+    public Task CloseLaneAsync(string laneNo)
+    {
+        _topologicalMap.CloseLane(laneNo);
+        return Task.CompletedTask;
+    }
+
+    public Task OpenLaneAsync(string laneNo)
+    {
+        _topologicalMap.OpenLane(laneNo);
+        return Task.CompletedTask;
     }
 
     #endregion

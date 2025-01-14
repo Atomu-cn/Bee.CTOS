@@ -54,6 +54,26 @@ public class TopologicalMapLane : EntityBase<TopologicalMapLane>
         get { return _count; }
     }
 
+    private readonly bool _closed;
+
+    /// <summary>
+    /// 是否禁行
+    /// </summary>
+    public bool Closed
+    {
+        get { return _closed; }
+    }
+
+    private readonly DateTime _closedChangeTime;
+
+    /// <summary>
+    /// 禁行变更时间
+    /// </summary>
+    public DateTime ClosedChangeTime
+    {
+        get { return _closedChangeTime; }
+    }
+
     #region Detail
 
     [NonSerialized]
@@ -184,6 +204,30 @@ public class TopologicalMapLane : EntityBase<TopologicalMapLane>
     {
         this.DeleteDetails<TopologicalMapLaneNode>(transaction);
         base.DeleteSelf(transaction);
+    }
+
+    /// <summary>
+    /// 禁止通行
+    /// </summary>
+    public void Close()
+    {
+        if (Closed)
+            return;
+
+        this.UpdateSelf(Set(p => p.Closed, true).
+            Set(p => p.ClosedChangeTime, DateTime.Now));
+    }
+
+    /// <summary>
+    /// 恢复通行
+    /// </summary>
+    public void Open()
+    {
+        if (!Closed)
+            return;
+
+        this.UpdateSelf(Set(p => p.Closed, false).
+            Set(p => p.ClosedChangeTime, DateTime.Now));
     }
 
     #endregion

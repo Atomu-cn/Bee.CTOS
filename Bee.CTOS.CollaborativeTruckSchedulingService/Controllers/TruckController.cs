@@ -58,7 +58,7 @@ namespace Bee.CTOS.CollaborativeTruckSchedulingService.Controllers
         /// <summary>
         /// 更改健康状态
         /// </summary>
-        [HttpPatch]
+        [HttpPatch("health-status")]
         public async Task<ActionResult> ChangeHealthStatus(string truckNo, TruckHealthStatus healthStatus)
         {
             await FetchTruckActor(truckNo).ChangeHealthStatusAsync(healthStatus);

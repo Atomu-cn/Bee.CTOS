@@ -4,9 +4,9 @@ using Bee.CTOS.CollaborativeTruckSchedulingService.Models;
 namespace Bee.CTOS.CollaborativeTruckSchedulingService.Actors;
 
 /// <summary>
-/// 拓扑地图
+/// 拓扑地图节点
 /// </summary>
-public interface ITopologicalMapActor : IActor
+public interface ITopologicalMapNodeActor : IActor
 {
     /// <summary>
     /// 获取地图
@@ -41,16 +41,4 @@ public interface ITopologicalMapActor : IActor
     /// </summary>
     /// <param name="laneNo">车道编号</param>
     Task<bool> DeleteLaneAsync(string laneNo);
-
-    /// <summary>
-    /// 禁止通行
-    /// </summary>
-    /// <param name="laneNo">车道编号</param>
-    Task CloseLaneAsync(string laneNo);
-
-    /// <summary>
-    /// 恢复通行
-    /// </summary>
-    /// <param name="laneNo">车道编号</param>
-    Task OpenLaneAsync(string laneNo);
 }

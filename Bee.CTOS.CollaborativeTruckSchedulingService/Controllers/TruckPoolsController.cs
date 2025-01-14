@@ -60,7 +60,7 @@ namespace Bee.CTOS.CollaborativeTruckSchedulingService.Controllers
         /// <summary>
         /// 作废
         /// </summary>
-        [HttpDelete]
+        [HttpPost("invalid")]
         public async Task<ActionResult> Invalid(string terminalNo, string truckPoolsNo)
         {
             await FetchTruckPoolsActor(terminalNo, truckPoolsNo).InvalidAsync();
@@ -70,7 +70,7 @@ namespace Bee.CTOS.CollaborativeTruckSchedulingService.Controllers
         /// <summary>
         /// 恢复
         /// </summary>
-        [HttpPatch]
+        [HttpPost("resume")]
         public async Task<ActionResult> Resume(string terminalNo, string truckPoolsNo)
         {
             await FetchTruckPoolsActor(terminalNo, truckPoolsNo).ResumeAsync();

@@ -84,6 +84,26 @@ namespace Bee.CTOS.CollaborativeTruckSchedulingService.Controllers
             return await FetchTopologicalMapActor(terminalNo).DeleteLaneAsync(laneNo);
         }
 
+        /// <summary>
+        /// 禁止通行
+        /// </summary>
+        [HttpPost("close-lane")]
+        public async Task<ActionResult> CloseLane(string terminalNo, string laneNo)
+        {
+            await FetchTopologicalMapActor(terminalNo).CloseLaneAsync(laneNo);
+            return Ok();
+        }
+
+        /// <summary>
+        /// 恢复通行
+        /// </summary>
+        [HttpPost("open-lane")]
+        public async Task<ActionResult> OpenLane(string terminalNo, string laneNo)
+        {
+            await FetchTopologicalMapActor(terminalNo).OpenLaneAsync(laneNo);
+            return Ok();
+        }
+
         #endregion
     }
 }
