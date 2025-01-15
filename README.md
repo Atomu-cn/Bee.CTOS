@@ -10,9 +10,12 @@ Container Terminal Operation System
 
 本项目，参考了“集装箱港口连续泊位分配与岸桥作业调度联合优化／范志强著．北京：中国经济出版社，2017.12”及集装箱码头集成调度问题相关学术论文，采用分布式人工智能（Distributed Artificial Intelligence，简称DAI）理论和技术，基于Dapr（Distributed Application Runtime）一个可移植、事件驱动的运行时框架，实现三种设备（岸桥、场桥、水平运输设备）间协同作业、集成调度的自动化与智能化，可支持大规模生产场景下传统码头/半自动化码头/全自动化码头的集装箱装卸作业过程。
 
-具体架构见《Bee.CTOS.系统架构图.ppt》
+#### 架构
+见《Bee.CTOS.系统架构图.ppt》
 
-
+#### 更新日志
+20250115
+完成“Internal Truck Scheduling System 内集卡调度系统”工程搭建
 
 
 

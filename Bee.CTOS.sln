@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Phenix.Core_PgSQL", "Phenix
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ITOS.IGV.Plugin", "ITOS.IGV.Plugin\ITOS.IGV.Plugin.csproj", "{E7D5C2F1-1344-49EB-BDD1-E9717102993C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bee.CTOS.CollaborativeTruckSchedulingService", "Bee.CTOS.CollaborativeTruckSchedulingService\Bee.CTOS.CollaborativeTruckSchedulingService.csproj", "{BDA6F72E-3B6C-4680-A63A-227556B86A37}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bee.CTOS.InternalTruckSchedulingService", "Bee.CTOS.InternalTruckSchedulingService\Bee.CTOS.InternalTruckSchedulingService.csproj", "{DF83DDE9-B354-49EE-87B5-B738775DE7FE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,10 +49,10 @@ Global
 		{E7D5C2F1-1344-49EB-BDD1-E9717102993C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E7D5C2F1-1344-49EB-BDD1-E9717102993C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E7D5C2F1-1344-49EB-BDD1-E9717102993C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BDA6F72E-3B6C-4680-A63A-227556B86A37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BDA6F72E-3B6C-4680-A63A-227556B86A37}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BDA6F72E-3B6C-4680-A63A-227556B86A37}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BDA6F72E-3B6C-4680-A63A-227556B86A37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF83DDE9-B354-49EE-87B5-B738775DE7FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF83DDE9-B354-49EE-87B5-B738775DE7FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF83DDE9-B354-49EE-87B5-B738775DE7FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF83DDE9-B354-49EE-87B5-B738775DE7FE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
