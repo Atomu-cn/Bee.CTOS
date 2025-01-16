@@ -54,9 +54,10 @@ namespace Bee.CTOS.InternalTruckSchedulingService.Controllers
         /// <param name="terminalNo">码头编号</param>
         /// <param name="location">位置（地图标记位置）</param>
         [HttpDelete("node")]
-        public async Task<ActionResult<bool>> DeleteNode(string terminalNo, string location)
+        public async Task<ActionResult> DeleteNode(string terminalNo, string location)
         {
-            return await FetchTopologicalMapActor(terminalNo).DeleteNodeAsync(location);
+            await FetchTopologicalMapActor(terminalNo).DeleteNodeAsync(location);
+            return Ok();
         }
 
         /// <summary>
@@ -79,9 +80,10 @@ namespace Bee.CTOS.InternalTruckSchedulingService.Controllers
         /// <param name="terminalNo">码头编号</param>
         /// <param name="laneNo">车道编号</param>
         [HttpDelete("lane")]
-        public async Task<ActionResult<bool>> DeleteLane(string terminalNo, string laneNo)
+        public async Task<ActionResult> DeleteLane(string terminalNo, string laneNo)
         {
-            return await FetchTopologicalMapActor(terminalNo).DeleteLaneAsync(laneNo);
+            await FetchTopologicalMapActor(terminalNo).DeleteLaneAsync(laneNo);
+            return Ok();
         }
 
         /// <summary>

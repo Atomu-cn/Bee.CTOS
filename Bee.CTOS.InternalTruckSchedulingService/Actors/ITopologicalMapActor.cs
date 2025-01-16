@@ -26,7 +26,7 @@ public interface ITopologicalMapActor : IActor
     /// Delete节点
     /// </summary>
     /// <param name="location">位置（地图标记位置）</param>
-    Task<bool> DeleteNodeAsync(string location);
+    Task DeleteNodeAsync(string location);
 
     /// <summary>
     /// Put车道
@@ -40,7 +40,7 @@ public interface ITopologicalMapActor : IActor
     /// Delete车道
     /// </summary>
     /// <param name="laneNo">车道编号</param>
-    Task<bool> DeleteLaneAsync(string laneNo);
+    Task DeleteLaneAsync(string laneNo);
 
     /// <summary>
     /// 禁止通行

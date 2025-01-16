@@ -8,7 +8,7 @@ namespace Bee.CTOS.InternalTruckSchedulingService.Actors;
 public interface ITopologicalMapNodeActor : IActor
 {
     /// <summary>
-    /// 重置自动运行
+    /// 重置
     /// </summary>
-    Task ResetAutoRunAsync();
+    Task ResetAsync();
 }

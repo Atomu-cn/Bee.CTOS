@@ -215,20 +215,18 @@ public class TopologicalMap : EntityBase<TopologicalMap>
     /// 禁止通行
     /// </summary>
     /// <param name="laneNo">车道编号</param>
-    public void CloseLane(string laneNo)
+    public bool CloseLane(string laneNo)
     {
-        if (LaneDict.TryGetValue(laneNo, out TopologicalMapLane? lane))
-            lane.Close();
+        return LaneDict.TryGetValue(laneNo, out TopologicalMapLane? lane) && lane.Close();
     }
 
     /// <summary>
     /// 恢复通行
     /// </summary>
     /// <param name="laneNo">车道编号</param>
-    public void OpenLane(string laneNo)
+    public bool OpenLane(string laneNo)
     {
-        if (LaneDict.TryGetValue(laneNo, out TopologicalMapLane? lane))
-            lane.Open();
+        return LaneDict.TryGetValue(laneNo, out TopologicalMapLane? lane) && lane.Open();
     }
 
     #endregion

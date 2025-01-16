@@ -209,25 +209,25 @@ public class TopologicalMapLane : EntityBase<TopologicalMapLane>
     /// <summary>
     /// 禁止通行
     /// </summary>
-    public void Close()
+    public bool Close()
     {
         if (Closed)
-            return;
+            return false;
 
-        this.UpdateSelf(Set(p => p.Closed, true).
-            Set(p => p.ClosedChangeTime, DateTime.Now));
+        return this.UpdateSelf(Set(p => p.Closed, true).
+            Set(p => p.ClosedChangeTime, DateTime.Now)) == 1;
     }
 
     /// <summary>
     /// 恢复通行
     /// </summary>
-    public void Open()
+    public bool Open()
     {
         if (!Closed)
-            return;
+            return false;
 
-        this.UpdateSelf(Set(p => p.Closed, false).
-            Set(p => p.ClosedChangeTime, DateTime.Now));
+        return this.UpdateSelf(Set(p => p.Closed, false).
+            Set(p => p.ClosedChangeTime, DateTime.Now)) == 1;
     }
 
     #endregion

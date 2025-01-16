@@ -25,13 +25,13 @@ public class TopologicalMapActor : Actor, ITopologicalMapActor
 
     #region 方法
 
-    private async Task ResetAutoRunAsync()
+    private async Task ResetGraphAsync()
     {
         List<Task> tasks = new List<Task>(_topologicalMap.NodeDict.Count);
         foreach (KeyValuePair<string, TopologicalMapNode> kvp in _topologicalMap.NodeDict)
         {
             ActorId actorId = new ActorId($"{{\"TerminalNo\":\"{_topologicalMap.TerminalNo}\",\"Location\":\"{kvp.Value.Location}\"}}");
-            tasks.Add(Task.Run(() => this.ProxyFactory.CreateActorProxy<ITopologicalMapNodeActor>(actorId, nameof(TopologicalMapNodeActor)).ResetAutoRunAsync()));
+            tasks.Add(Task.Run(() => this.ProxyFactory.CreateActorProxy<ITopologicalMapNodeActor>(actorId, nameof(TopologicalMapNodeActor)).ResetAsync()));
         }
 
         await Task.WhenAll(tasks.ToArray());
@@ -64,9 +64,11 @@ public class TopologicalMapActor : Actor, ITopologicalMapActor
     /// Delete节点
     /// </summary>
     /// <param name="location">位置（地图标记位置）</param>
-    public Task<bool> DeleteNodeAsync(string location)
+    public async Task DeleteNodeAsync(string location)
     {
-        return Task.FromResult(_topologicalMap.DeleteNode(location));
+        bool result = _topologicalMap.DeleteNode(location);
+        if (result)
+            await ResetGraphAsync();
     }
 
     /// <summary>
@@ -75,39 +77,43 @@ public class TopologicalMapActor : Actor, ITopologicalMapActor
     /// <param name="laneNo">车道编号</param>
     /// <param name="count">经度（地图标记位置）</param>
     /// <param name="nodeLocations">节点位置集合（按LaneNo排列）</param>
-    public Task PutLaneAsync(string laneNo, int count, string[] nodeLocations)
+    public async Task PutLaneAsync(string laneNo, int count, string[] nodeLocations)
     {
         _topologicalMap.PutLane(laneNo, count, nodeLocations);
-        return Task.CompletedTask;
+        await ResetGraphAsync();
     }
 
     /// <summary>
     /// Delete车道
     /// </summary>
     /// <param name="laneNo">车道编号</param>
-    public Task<bool> DeleteLaneAsync(string laneNo)
+    public async Task DeleteLaneAsync(string laneNo)
     {
-        return Task.FromResult(_topologicalMap.DeleteLane(laneNo));
+        bool result = _topologicalMap.DeleteLane(laneNo);
+        if (result)
+            await ResetGraphAsync();
     }
 
     /// <summary>
     /// 禁止通行
     /// </summary>
     /// <param name="laneNo">车道编号</param>
-    public Task CloseLaneAsync(string laneNo)
+    public async Task CloseLaneAsync(string laneNo)
     {
-        _topologicalMap.CloseLane(laneNo);
-        return Task.CompletedTask;
+        bool result = _topologicalMap.CloseLane(laneNo);
+        if (result)
+            await ResetGraphAsync();
     }
 
     /// <summary>
     /// 恢复通行
     /// </summary>
     /// <param name="laneNo">车道编号</param>
-    public Task OpenLaneAsync(string laneNo)
+    public async Task OpenLaneAsync(string laneNo)
     {
-        _topologicalMap.OpenLane(laneNo);
-        return Task.CompletedTask;
+        bool result = _topologicalMap.OpenLane(laneNo);
+        if (result)
+            await ResetGraphAsync();
     }
 
     /// <summary>

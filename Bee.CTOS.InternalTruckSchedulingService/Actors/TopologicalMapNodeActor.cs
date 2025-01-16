@@ -45,20 +45,30 @@ public class TopologicalMapNodeActor : Actor, ITopologicalMapNodeActor
 
     #region AutoRun
 
-    private async Task DoResetAutoRunAsync()
+    private async Task RegisterTimerAsync()
     {
         if (_timer == null)
             _timer = await this.RegisterTimerAsync(this.Id.ToString(), nameof(OnTimerCallBack), null, AutoRunConfig.TopologicalMapNodeActorAliveInterval, AutoRunConfig.TopologicalMapNodeActorAliveInterval);
     }
 
+    private async Task UnRegisterTimerAsync()
+    {
+        if (_timer != null)
+        {
+            await this.UnregisterTimerAsync(_timer);
+            _timer = null;
+        }
+    }
+
     private async Task OnTimerCallBack(byte[] data)
     {
+        ITopologicalMapActor mapActor = FetchTopologicalMapActor();
         if (_ownerLaneNos == null)
-            _ownerLaneNos = await FetchTopologicalMapActor().FindOwnerLaneNosAsync(_location);
+            _ownerLaneNos = await mapActor.FindOwnerLaneNosAsync(_location);
         if (_entryLaneNos == null)
-            _entryLaneNos = await FetchTopologicalMapActor().FindEntryLaneNosAsync(_location);
+            _entryLaneNos = await mapActor.FindEntryLaneNosAsync(_location);
         if ( _exitLaneNos == null)
-            _exitLaneNos = await FetchTopologicalMapActor().FindExitLaneNosAsync(_location);
+            _exitLaneNos = await mapActor.FindExitLaneNosAsync(_location);
 
     }
     
@@ -67,11 +77,15 @@ public class TopologicalMapNodeActor : Actor, ITopologicalMapNodeActor
     #region API
 
     /// <summary>
-    /// 重置自动运行
+    /// 重置
     /// </summary>
-    public async Task ResetAutoRunAsync()
+    public async Task ResetAsync()
     {
-        await DoResetAutoRunAsync();
+        await UnRegisterTimerAsync();
+        _ownerLaneNos = null;
+        _entryLaneNos = null;
+        _exitLaneNos = null;
+        await RegisterTimerAsync();
     }
 
     #endregion
