@@ -393,25 +393,25 @@ public class CarryingTask : EntityBase<CarryingTask>
     /// <summary>
     /// 暂停任务
     /// </summary>
-    public void Suspend()
+    public bool Suspend()
     {
         if (Suspending)
-            return;
+            return false;
 
-        this.UpdateSelf(Set(p => p.Suspending, true).
-            Set(p => p.SuspendingChangeTime, DateTime.Now));
+        return this.UpdateSelf(Set(p => p.Suspending, true).
+            Set(p => p.SuspendingChangeTime, DateTime.Now)) == 1;
     }
 
     /// <summary>
     /// 恢复任务
     /// </summary>
-    public void Resume()
+    public bool Resume()
     {
         if (!Suspending)
-            return;
+            return false;
 
-        this.UpdateSelf(Set(p => p.Suspending, false).
-            Set(p => p.SuspendingChangeTime, DateTime.Now));
+        return this.UpdateSelf(Set(p => p.Suspending, false).
+            Set(p => p.SuspendingChangeTime, DateTime.Now)) == 1;
     }
 
     #endregion

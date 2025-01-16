@@ -191,7 +191,7 @@ public class TopologicalMapLane : EntityBase<TopologicalMapLane>
 
     #region ·½·¨
 
-    internal void ResetRelate(TopologicalMapNode node)
+    internal void ResetBy(TopologicalMapNode node)
     {
         if (_nodeDistanceDict != null && _nodeDistanceDict.ContainsKey(node))
         {

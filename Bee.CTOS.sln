@@ -5,21 +5,7 @@ VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Phenix.StorageAlgorithm", "Phenix.StorageAlgorithm\Phenix.StorageAlgorithm.csproj", "{0EF53BFE-A99F-4E2F-8B22-0FB2B767BD19}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Phenix.StorageAlgorithm.Test", "Phenix.StorageAlgorithm.Test", "{38F08200-D24F-40BE-8822-A54E1C719E59}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Phenix.StorageAlgorithm.Test.EvenlySplitArray", "Phenix.StorageAlgorithm.Test\Phenix.StorageAlgorithm.Test.EvenlySplitArray\Phenix.StorageAlgorithm.Test.EvenlySplitArray.csproj", "{CDB88E17-A1DA-4CFD-9454-EA89E66CC50A}"
-	ProjectSection(ProjectDependencies) = postProject
-		{0EF53BFE-A99F-4E2F-8B22-0FB2B767BD19} = {0EF53BFE-A99F-4E2F-8B22-0FB2B767BD19}
-	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Phenix.StorageAlgorithm.Test.PreShipmentBlockRelocation", "Phenix.StorageAlgorithm.Test\Phenix.StorageAlgorithm.Test.PreShipmentBlockRelocation\Phenix.StorageAlgorithm.Test.PreShipmentBlockRelocation.csproj", "{7170A85C-BE41-468C-AA67-C0D2551AF3BC}"
-	ProjectSection(ProjectDependencies) = postProject
-		{0EF53BFE-A99F-4E2F-8B22-0FB2B767BD19} = {0EF53BFE-A99F-4E2F-8B22-0FB2B767BD19}
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Phenix.Core_PgSQL", "Phenix.Core\Phenix.Core_PgSQL.csproj", "{EEE93482-A9C3-4361-BD5F-7F48B8B29FE6}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ITOS.IGV.Plugin", "ITOS.IGV.Plugin\ITOS.IGV.Plugin.csproj", "{E7D5C2F1-1344-49EB-BDD1-E9717102993C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bee.CTOS.InternalTruckSchedulingService", "Bee.CTOS.InternalTruckSchedulingService\Bee.CTOS.InternalTruckSchedulingService.csproj", "{DF83DDE9-B354-49EE-87B5-B738775DE7FE}"
 EndProject
@@ -33,22 +19,10 @@ Global
 		{0EF53BFE-A99F-4E2F-8B22-0FB2B767BD19}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0EF53BFE-A99F-4E2F-8B22-0FB2B767BD19}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0EF53BFE-A99F-4E2F-8B22-0FB2B767BD19}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CDB88E17-A1DA-4CFD-9454-EA89E66CC50A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CDB88E17-A1DA-4CFD-9454-EA89E66CC50A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CDB88E17-A1DA-4CFD-9454-EA89E66CC50A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CDB88E17-A1DA-4CFD-9454-EA89E66CC50A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7170A85C-BE41-468C-AA67-C0D2551AF3BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7170A85C-BE41-468C-AA67-C0D2551AF3BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7170A85C-BE41-468C-AA67-C0D2551AF3BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7170A85C-BE41-468C-AA67-C0D2551AF3BC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EEE93482-A9C3-4361-BD5F-7F48B8B29FE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EEE93482-A9C3-4361-BD5F-7F48B8B29FE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EEE93482-A9C3-4361-BD5F-7F48B8B29FE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EEE93482-A9C3-4361-BD5F-7F48B8B29FE6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E7D5C2F1-1344-49EB-BDD1-E9717102993C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E7D5C2F1-1344-49EB-BDD1-E9717102993C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E7D5C2F1-1344-49EB-BDD1-E9717102993C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E7D5C2F1-1344-49EB-BDD1-E9717102993C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DF83DDE9-B354-49EE-87B5-B738775DE7FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DF83DDE9-B354-49EE-87B5-B738775DE7FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF83DDE9-B354-49EE-87B5-B738775DE7FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -56,10 +30,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{CDB88E17-A1DA-4CFD-9454-EA89E66CC50A} = {38F08200-D24F-40BE-8822-A54E1C719E59}
-		{7170A85C-BE41-468C-AA67-C0D2551AF3BC} = {38F08200-D24F-40BE-8822-A54E1C719E59}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4763DB48-829B-4C1E-AE14-A39F4C62AC0E}

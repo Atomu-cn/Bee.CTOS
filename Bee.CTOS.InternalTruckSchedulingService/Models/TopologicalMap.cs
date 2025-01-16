@@ -100,18 +100,18 @@ public class TopologicalMap : EntityBase<TopologicalMap>
 
     #region 方法
 
-    private void ResetRelate(TopologicalMapNode node)
+    private void ResetBy(TopologicalMapNode node)
     {
         if (_laneDict != null)
             foreach (KeyValuePair<string, TopologicalMapLane> kvp in _laneDict)
-                kvp.Value.ResetRelate(node);
+                kvp.Value.ResetBy(node);
     }
 
-    private void ResetRelate(TopologicalMapLane lane)
+    private void ResetBy(TopologicalMapLane lane)
     {
         if (_nodeDict != null)
             foreach (KeyValuePair<string, TopologicalMapNode> kvp in _nodeDict)
-                kvp.Value.ResetRelate(lane);
+                kvp.Value.ResetBy(lane);
     }
 
     /// <summary>
@@ -129,7 +129,7 @@ public class TopologicalMap : EntityBase<TopologicalMap>
                 TopologicalMapNode.Set(p => p.LocationLng, locationLng).
                     Set(p => p.LocationLat, locationLat).
                     Set(p => p.NodeType, nodeType));
-            ResetRelate(node);
+            ResetBy(node);
         }
         else
         {
@@ -155,7 +155,7 @@ public class TopologicalMap : EntityBase<TopologicalMap>
             Dictionary<string, TopologicalMapNode> nodeDict = new Dictionary<string, TopologicalMapNode>(NodeDict);
             nodeDict.Remove(node.Location);
             NodeDict = nodeDict.AsReadOnly();
-            ResetRelate(node);
+            ResetBy(node);
             return true;
         }
 
@@ -189,7 +189,7 @@ public class TopologicalMap : EntityBase<TopologicalMap>
             else
                 throw new InvalidOperationException($"位置{nodeLocations[i]}匹配不到现成的节点!");
         lane.NodeDict = nodeDict.AsReadOnly();
-        ResetRelate(lane);
+        ResetBy(lane);
     }
 
     /// <summary>
@@ -204,7 +204,7 @@ public class TopologicalMap : EntityBase<TopologicalMap>
             Dictionary<string, TopologicalMapLane> laneDict = new Dictionary<string, TopologicalMapLane>(LaneDict);
             laneDict.Remove(lane.LaneNo);
             LaneDict = laneDict.AsReadOnly();
-            ResetRelate(lane);
+            ResetBy(lane);
             return true;
         }
 

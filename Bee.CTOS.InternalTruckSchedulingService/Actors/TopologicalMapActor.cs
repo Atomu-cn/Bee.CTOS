@@ -1,5 +1,6 @@
-using Dapr.Actors.Runtime;
 using Bee.CTOS.InternalTruckSchedulingService.Models;
+using Dapr.Actors;
+using Dapr.Actors.Runtime;
 
 namespace Bee.CTOS.InternalTruckSchedulingService.Actors;
 
@@ -23,6 +24,18 @@ public class TopologicalMapActor : Actor, ITopologicalMapActor
     #endregion
 
     #region 方法
+
+    private async Task ResetAutoRunAsync()
+    {
+        List<Task> tasks = new List<Task>(_topologicalMap.NodeDict.Count);
+        foreach (KeyValuePair<string, TopologicalMapNode> kvp in _topologicalMap.NodeDict)
+        {
+            ActorId actorId = new ActorId($"{{\"TerminalNo\":\"{_topologicalMap.TerminalNo}\",\"Location\":\"{kvp.Value.Location}\"}}");
+            tasks.Add(Task.Run(() => this.ProxyFactory.CreateActorProxy<ITopologicalMapNodeActor>(actorId, nameof(TopologicalMapNodeActor)).ResetAutoRunAsync()));
+        }
+
+        await Task.WhenAll(tasks.ToArray());
+    }
 
     #region API
 
@@ -77,16 +90,57 @@ public class TopologicalMapActor : Actor, ITopologicalMapActor
         return Task.FromResult(_topologicalMap.DeleteLane(laneNo));
     }
 
+    /// <summary>
+    /// 禁止通行
+    /// </summary>
+    /// <param name="laneNo">车道编号</param>
     public Task CloseLaneAsync(string laneNo)
     {
         _topologicalMap.CloseLane(laneNo);
         return Task.CompletedTask;
     }
 
+    /// <summary>
+    /// 恢复通行
+    /// </summary>
+    /// <param name="laneNo">车道编号</param>
     public Task OpenLaneAsync(string laneNo)
     {
         _topologicalMap.OpenLane(laneNo);
         return Task.CompletedTask;
+    }
+
+    /// <summary>
+    /// 查找节点所属车道集合
+    /// </summary>
+    /// <param name="nodeLocation">节点位置</param>
+    public Task<string[]?> FindOwnerLaneNosAsync(string nodeLocation)
+    {
+        return Task.FromResult(_topologicalMap.NodeDict.TryGetValue(nodeLocation, out TopologicalMapNode? node)
+            ? node.OwnerLaneDict.Keys.ToArray()
+            : null);
+    }
+
+    /// <summary>
+    /// 查找节点入口车道集合
+    /// </summary>
+    /// <param name="nodeLocation">节点位置</param>
+    public Task<string[]?> FindEntryLaneNosAsync(string nodeLocation)
+    {
+        return Task.FromResult(_topologicalMap.NodeDict.TryGetValue(nodeLocation, out TopologicalMapNode? node)
+            ? node.EntryLaneDict.Keys.ToArray()
+            : null);
+    }
+
+    /// <summary>
+    /// 查找节点出口车道集合
+    /// </summary>
+    /// <param name="nodeLocation">节点位置</param>
+    public Task<string[]?> FindExitLaneNosAsync(string nodeLocation)
+    {
+        return Task.FromResult(_topologicalMap.NodeDict.TryGetValue(nodeLocation, out TopologicalMapNode? node)
+            ? node.ExitLaneDict.Keys.ToArray()
+            : null);
     }
 
     #endregion

@@ -1,8 +1,7 @@
-using Dapr.Actors;
-using Dapr.Actors.Runtime;
-using Newtonsoft.Json;
 using Bee.CTOS.InternalTruckSchedulingService.Configs;
 using Bee.CTOS.InternalTruckSchedulingService.Models;
+using Dapr.Actors.Runtime;
+using Newtonsoft.Json;
 
 namespace Bee.CTOS.InternalTruckSchedulingService.Actors;
 
@@ -17,7 +16,7 @@ public class TruckPoolsActor : Actor, IRemindable, ITruckPoolsActor
     {
         dynamic? truckPools = JsonConvert.DeserializeObject<dynamic>(this.Id.ToString());
         if (truckPools == null)
-            throw new NotSupportedException($"本{this.GetType().FullName}不支持用'{this.Id}'格式构造TruckPools对象!");
+            throw new NotSupportedException($"本{this.GetType().FullName}不支持用'{this.Id}'格式构造TTruckPoolsActor对象!");
 
         _terminalNo = truckPools.TerminalNo;
         _truckPoolsNo = truckPools.TruckPoolsNo;
@@ -29,22 +28,23 @@ public class TruckPoolsActor : Actor, IRemindable, ITruckPoolsActor
     private readonly string _terminalNo;
     private readonly string _truckPoolsNo;
     private TruckPools? _truckPools;
-    private const string _truckPoolsReminderName = "TruckPoolsReminder";
-    private const string _truckPoolsTimerName = "TruckPoolsTimer";
+    
     private ActorTimer? _timer;
 
     #endregion
 
     #region 方法
 
+    #region AutoRun
+
     private async Task RegisterReminderAsync()
     {
-        await this.RegisterReminderAsync(_truckPoolsReminderName, null, TimeSpan.FromSeconds(0), ActorConfig.ActorIdleTimeout);
+        await this.RegisterReminderAsync(this.Id.ToString(), null, TimeSpan.FromSeconds(0), ActorConfig.ActorIdleTimeout);
     }
 
     private async Task UnRegisterReminderAsync()
     {
-        await this.UnregisterReminderAsync(_truckPoolsReminderName);
+        await this.UnregisterReminderAsync(this.Id.ToString());
         if (_timer != null)
         {
             await this.UnregisterTimerAsync(_timer);
@@ -55,21 +55,14 @@ public class TruckPoolsActor : Actor, IRemindable, ITruckPoolsActor
     async Task IRemindable.ReceiveReminderAsync(string reminderName, byte[] state, TimeSpan dueTime, TimeSpan period)
     {
         if (_timer == null && _truckPools != null && !_truckPools.Invalided)
-            _timer = await this.RegisterTimerAsync(_truckPoolsTimerName, nameof(OnTimerCallBack), null, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(5));
+            _timer = await this.RegisterTimerAsync(this.Id.ToString(), nameof(OnTimerCallBack), null, AutoRunConfig.TruckPoolsActorKeepAliveInterval, AutoRunConfig.TruckPoolsActorKeepAliveInterval);
     }
 
     private async Task OnTimerCallBack(byte[] data)
     {
-        List<Task<TruckCarryingTask>> tasks = new List<Task<TruckCarryingTask>>(_truckPools.Trucks.Length);
-        foreach (TruckPoolsTruck item in _truckPools.Trucks)
-            tasks.Add(Task.Run(() => this.ProxyFactory.CreateActorProxy<ITruckActor>(new ActorId(item.TruckNo), nameof(TruckActor)).
-                NewTaskAsync(task, (Models.TruckLoadingPosition)Int32.Parse(msg.PlanLoadingPosition))));
-        await Task.WhenAll(tasks);
-        foreach (Task<TruckCarryingTask> item in tasks)
-        {
-
-        }
     }
+    
+    #endregion
 
     #region API
 
@@ -95,8 +88,8 @@ public class TruckPoolsActor : Actor, IRemindable, ITruckPoolsActor
         if (_truckPools == null)
             throw new NotSupportedException($"本码头'{_terminalNo}'集卡池'{_truckPoolsNo}'还未创建, 无法作废!");
 
-        _truckPools.Invalid();
-        await UnRegisterReminderAsync();
+        if (_truckPools.Invalid())
+            await UnRegisterReminderAsync();
     }
 
     /// <summary>
@@ -107,8 +100,8 @@ public class TruckPoolsActor : Actor, IRemindable, ITruckPoolsActor
         if (_truckPools == null)
             throw new NotSupportedException($"本码头'{_terminalNo}'集卡池'{_truckPoolsNo}'还未创建, 无法恢复!");
 
-        _truckPools.Resume();
-        await RegisterReminderAsync();
+        if (_truckPools.Resume())
+            await RegisterReminderAsync();
     }
 
     /// <summary>

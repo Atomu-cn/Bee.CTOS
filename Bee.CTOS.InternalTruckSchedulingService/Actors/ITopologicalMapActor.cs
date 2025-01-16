@@ -1,5 +1,5 @@
-using Dapr.Actors;
 using Bee.CTOS.InternalTruckSchedulingService.Models;
+using Dapr.Actors;
 
 namespace Bee.CTOS.InternalTruckSchedulingService.Actors;
 
@@ -53,4 +53,22 @@ public interface ITopologicalMapActor : IActor
     /// </summary>
     /// <param name="laneNo">车道编号</param>
     Task OpenLaneAsync(string laneNo);
+
+    /// <summary>
+    /// 查找节点所属车道集合
+    /// </summary>
+    /// <param name="nodeLocation">节点位置</param>
+    Task<string[]?> FindOwnerLaneNosAsync(string nodeLocation);
+
+    /// <summary>
+    /// 查找节点入口车道集合
+    /// </summary>
+    /// <param name="nodeLocation">节点位置</param>
+    Task<string[]?> FindEntryLaneNosAsync(string nodeLocation);
+
+    /// <summary>
+    /// 查找节点出口车道集合
+    /// </summary>
+    /// <param name="nodeLocation">节点位置</param>
+    Task<string[]?> FindExitLaneNosAsync(string nodeLocation);
 }

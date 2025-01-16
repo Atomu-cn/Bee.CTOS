@@ -81,7 +81,7 @@ public class TruckCarryingTask : EntityBase<TruckCarryingTask>
         get { return _originateTime; }
     }
 
-    #region Relate
+    #region Relation
 
     [NonSerialized]
     private CarryingTask? _task;

@@ -133,7 +133,7 @@ public class TruckPools : EntityBase<TruckPools>
 
     #endregion
 
-    #region Relate
+    #region Relation
 
     [NonSerialized]
     private CarryingTask[]? _tasks;
@@ -163,25 +163,25 @@ public class TruckPools : EntityBase<TruckPools>
     /// <summary>
     /// ×÷·Ï
     /// </summary>
-    public void Invalid()
+    public bool Invalid()
     {
         if (Invalided)
-            return;
+            return false;
 
-        this.UpdateSelf(Set(p => p.Invalided, true).
-            Set(p => p.InvalidedChangeTime, DateTime.Now));
+        return this.UpdateSelf(Set(p => p.Invalided, true).
+            Set(p => p.InvalidedChangeTime, DateTime.Now)) == 1;
     }
 
     /// <summary>
     /// »Ö¸´
     /// </summary>
-    public void Resume()
+    public bool Resume()
     {
         if (!Invalided)
-            return;
+            return false;
 
-        this.UpdateSelf(Set(p => p.Invalided, false).
-            Set(p => p.InvalidedChangeTime, DateTime.Now));
+        return this.UpdateSelf(Set(p => p.Invalided, false).
+            Set(p => p.InvalidedChangeTime, DateTime.Now)) == 1;
     }
 
     /// <summary>
