@@ -107,6 +107,8 @@ public static class Program
             options.Actors.RegisterActor<TruckPoolsActor>();
             options.Actors.RegisterActor<TruckActor>();
             options.Actors.RegisterActor<TopologicalMapActor>();
+            options.Actors.RegisterActor<TopologicalMapNodeActor>();
+            options.Actors.RegisterActor<TopologicalMapLaneActor>();
             options.ActorIdleTimeout = ActorConfig.ActorIdleTimeout;
             options.ActorScanInterval = ActorConfig.ActorScanInterval;
             options.DrainOngoingCallTimeout = ActorConfig.DrainOngoingCallTimeout;
