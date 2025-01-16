@@ -10,5 +10,5 @@ public interface ITopologicalMapNodeActor : IActor
     /// <summary>
     /// 重置自动运行
     /// </summary>
-    Task ResetRunAsync();
+    Task ResetAutoRunAsync();
 }

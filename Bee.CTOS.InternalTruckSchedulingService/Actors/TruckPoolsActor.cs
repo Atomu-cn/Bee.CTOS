@@ -55,7 +55,7 @@ public class TruckPoolsActor : Actor, IRemindable, ITruckPoolsActor
     async Task IRemindable.ReceiveReminderAsync(string reminderName, byte[] state, TimeSpan dueTime, TimeSpan period)
     {
         if (_timer == null && _truckPools != null && !_truckPools.Invalided)
-            _timer = await this.RegisterTimerAsync(this.Id.ToString(), nameof(OnTimerCallBack), null, AutoRunConfig.TruckPoolsActorKeepAliveInterval, AutoRunConfig.TruckPoolsActorKeepAliveInterval);
+            _timer = await this.RegisterTimerAsync(this.Id.ToString(), nameof(OnTimerCallBack), null, AutoRunConfig.TruckPoolsActorAliveInterval, AutoRunConfig.TruckPoolsActorAliveInterval);
     }
 
     private async Task OnTimerCallBack(byte[] data)
