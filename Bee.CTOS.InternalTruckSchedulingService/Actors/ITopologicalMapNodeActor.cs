@@ -8,6 +8,11 @@ namespace Bee.CTOS.InternalTruckSchedulingService.Actors;
 public interface ITopologicalMapNodeActor : IActor
 {
     /// <summary>
+    /// πÿÕ£
+    /// </summary>
+    Task ShutdownAsync();
+
+    /// <summary>
     /// ÷ÿ÷√
     /// </summary>
     Task ResetAsync();

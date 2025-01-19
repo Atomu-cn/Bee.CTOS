@@ -121,26 +121,29 @@ public class TopologicalMap : EntityBase<TopologicalMap>
     /// <param name="locationLng">经度（地图标记位置）</param>
     /// <param name="locationLat">纬度（地图标记位置）</param>
     /// <param name="nodeType">节点类型</param>
-    public void PutNode(string location, double locationLng, double locationLat, TopologicalMapNodeType nodeType)
+    /// <returns>节点</returns>
+    public TopologicalMapNode PutNode(string location, double locationLng, double locationLat, TopologicalMapNodeType nodeType)
     {
-        if (NodeDict.TryGetValue(location, out TopologicalMapNode? node))
+        if (NodeDict.TryGetValue(location, out TopologicalMapNode? result))
         {
-            node.UpdateSelf(
+            result.UpdateSelf(
                 TopologicalMapNode.Set(p => p.LocationLng, locationLng).
                     Set(p => p.LocationLat, locationLat).
                     Set(p => p.NodeType, nodeType));
-            ResetBy(node);
+            ResetBy(result);
         }
         else
         {
-            node = this.NewDetail<TopologicalMapNode>(
+            result = this.NewDetail<TopologicalMapNode>(
                 TopologicalMapNode.Set(p => p.Location, location).
                     Set(p => p.LocationLng, locationLng).
                     Set(p => p.LocationLat, locationLat).
                     Set(p => p.NodeType, nodeType));
-            node.InsertSelf();
-            NodeDict = new Dictionary<string, TopologicalMapNode>(NodeDict) { { location, node } }.AsReadOnly();
+            result.InsertSelf();
+            NodeDict = new Dictionary<string, TopologicalMapNode>(NodeDict) { { location, result } }.AsReadOnly();
         }
+
+        return result;
     }
 
     /// <summary>
@@ -168,18 +171,19 @@ public class TopologicalMap : EntityBase<TopologicalMap>
     /// <param name="laneNo">车道编号</param>
     /// <param name="count">经度（地图标记位置）</param>
     /// <param name="nodeLocations">节点位置集合（按LaneNo排列）</param>
-    public void PutLane(string laneNo, int count, string[] nodeLocations)
+    /// <returns>车道</returns>
+    public TopologicalMapLane PutLane(string laneNo, int count, string[] nodeLocations)
     {
-        if (LaneDict.TryGetValue(laneNo, out TopologicalMapLane? lane))
-            lane.UpdateSelf(
+        if (LaneDict.TryGetValue(laneNo, out TopologicalMapLane? result))
+            result.UpdateSelf(
                 TopologicalMapLane.Set(p => p.Count, count));
         else
         {
-            lane = this.NewDetail<TopologicalMapLane>(
+            result = this.NewDetail<TopologicalMapLane>(
                 TopologicalMapLane.Set(p => p.LaneNo, laneNo).
                     Set(p => p.Count, count));
-            lane.InsertSelf();
-            LaneDict = new Dictionary<string, TopologicalMapLane>(LaneDict) { { laneNo, lane } }.AsReadOnly();
+            result.InsertSelf();
+            LaneDict = new Dictionary<string, TopologicalMapLane>(LaneDict) { { laneNo, result } }.AsReadOnly();
         }
 
         Dictionary<int, TopologicalMapNode> nodeDict = new Dictionary<int, TopologicalMapNode>(nodeLocations.Length);
@@ -188,8 +192,9 @@ public class TopologicalMap : EntityBase<TopologicalMap>
                 nodeDict.Add(i, node);
             else
                 throw new InvalidOperationException($"位置{nodeLocations[i]}匹配不到现成的节点!");
-        lane.NodeDict = nodeDict.AsReadOnly();
-        ResetBy(lane);
+        result.NodeDict = nodeDict.AsReadOnly();
+        ResetBy(result);
+        return result;
     }
 
     /// <summary>
@@ -215,18 +220,24 @@ public class TopologicalMap : EntityBase<TopologicalMap>
     /// 禁止通行
     /// </summary>
     /// <param name="laneNo">车道编号</param>
-    public bool CloseLane(string laneNo)
+    /// <returns>被禁止通行的车道</returns>
+    public TopologicalMapLane? CloseLane(string laneNo)
     {
-        return LaneDict.TryGetValue(laneNo, out TopologicalMapLane? lane) && lane.Close();
+        if (LaneDict.TryGetValue(laneNo, out TopologicalMapLane? result)) 
+            return result.Close() ? result : null;
+        return null;
     }
 
     /// <summary>
     /// 恢复通行
     /// </summary>
     /// <param name="laneNo">车道编号</param>
-    public bool OpenLane(string laneNo)
+    /// <returns>被恢复通行的车道</returns>
+    public TopologicalMapLane? OpenLane(string laneNo)
     {
-        return LaneDict.TryGetValue(laneNo, out TopologicalMapLane? lane) && lane.Open();
+        if (LaneDict.TryGetValue(laneNo, out TopologicalMapLane? result)) 
+            return result.Open() ? result : null;
+        return null;
     }
 
     #endregion

@@ -1,3 +1,4 @@
+using System.Numerics;
 using Bee.CTOS.InternalTruckSchedulingService.Models;
 using Dapr.Actors;
 using Dapr.Actors.Runtime;
@@ -25,15 +26,34 @@ public class TopologicalMapActor : Actor, ITopologicalMapActor
 
     #region 方法
 
+    private ITopologicalMapNodeActor FetchTopologicalMapNodeActor(string location)
+    {
+        ActorId actorId = new ActorId($"{{\"TerminalNo\":\"{_topologicalMap.TerminalNo}\",\"Location\":\"{location}\"}}");
+        return this.ProxyFactory.CreateActorProxy<ITopologicalMapNodeActor>(actorId, nameof(TopologicalMapNodeActor));
+    }
+
+    private ITopologicalMapLaneActor FetchTopologicalMapLaneActor(string laneNo)
+    {
+        ActorId actorId = new ActorId($"{{\"TerminalNo\":\"{_topologicalMap.TerminalNo}\",\"LaneNo\":\"{laneNo}\"}}");
+        return this.ProxyFactory.CreateActorProxy<ITopologicalMapLaneActor>(actorId, nameof(TopologicalMapLaneActor));
+    }
+
+    private async Task ResetGraphAsync(TopologicalMapLane lane)
+    {
+        List<Task> tasks = new List<Task>(_topologicalMap.NodeDict.Count + 1);
+        foreach (KeyValuePair<int, TopologicalMapNode> kvp in lane.NodeDict)
+            tasks.Add(Task.Run(() => FetchTopologicalMapNodeActor(kvp.Value.Location).ResetAsync()));
+        tasks.Add(Task.Run(() => FetchTopologicalMapLaneActor(lane.LaneNo).ResetAsync()));
+        await Task.WhenAll(tasks.ToArray());
+    }
+
     private async Task ResetGraphAsync()
     {
-        List<Task> tasks = new List<Task>(_topologicalMap.NodeDict.Count);
+        List<Task> tasks = new List<Task>(_topologicalMap.NodeDict.Count + _topologicalMap.LaneDict.Count);
         foreach (KeyValuePair<string, TopologicalMapNode> kvp in _topologicalMap.NodeDict)
-        {
-            ActorId actorId = new ActorId($"{{\"TerminalNo\":\"{_topologicalMap.TerminalNo}\",\"Location\":\"{kvp.Value.Location}\"}}");
-            tasks.Add(Task.Run(() => this.ProxyFactory.CreateActorProxy<ITopologicalMapNodeActor>(actorId, nameof(TopologicalMapNodeActor)).ResetAsync()));
-        }
-
+            tasks.Add(Task.Run(() => FetchTopologicalMapNodeActor(kvp.Value.Location).ResetAsync()));
+        foreach (KeyValuePair<string, TopologicalMapLane> kvp in _topologicalMap.LaneDict)
+            tasks.Add(Task.Run(() => FetchTopologicalMapLaneActor(kvp.Value.LaneNo).ResetAsync()));
         await Task.WhenAll(tasks.ToArray());
     }
 
@@ -68,7 +88,7 @@ public class TopologicalMapActor : Actor, ITopologicalMapActor
     {
         bool result = _topologicalMap.DeleteNode(location);
         if (result)
-            await ResetGraphAsync();
+            await FetchTopologicalMapNodeActor(location).ShutdownAsync();
     }
 
     /// <summary>
@@ -79,8 +99,8 @@ public class TopologicalMapActor : Actor, ITopologicalMapActor
     /// <param name="nodeLocations">节点位置集合（按LaneNo排列）</param>
     public async Task PutLaneAsync(string laneNo, int count, string[] nodeLocations)
     {
-        _topologicalMap.PutLane(laneNo, count, nodeLocations);
-        await ResetGraphAsync();
+        TopologicalMapLane lane = _topologicalMap.PutLane(laneNo, count, nodeLocations);
+        await ResetGraphAsync(lane);
     }
 
     /// <summary>
@@ -91,7 +111,7 @@ public class TopologicalMapActor : Actor, ITopologicalMapActor
     {
         bool result = _topologicalMap.DeleteLane(laneNo);
         if (result)
-            await ResetGraphAsync();
+            await FetchTopologicalMapLaneActor(laneNo).ShutdownAsync();
     }
 
     /// <summary>
@@ -100,9 +120,9 @@ public class TopologicalMapActor : Actor, ITopologicalMapActor
     /// <param name="laneNo">车道编号</param>
     public async Task CloseLaneAsync(string laneNo)
     {
-        bool result = _topologicalMap.CloseLane(laneNo);
-        if (result)
-            await ResetGraphAsync();
+        TopologicalMapLane? lane = _topologicalMap.CloseLane(laneNo);
+        if (lane != null)
+            await FetchTopologicalMapLaneActor(lane.LaneNo).CloseAsync();
     }
 
     /// <summary>
@@ -111,9 +131,9 @@ public class TopologicalMapActor : Actor, ITopologicalMapActor
     /// <param name="laneNo">车道编号</param>
     public async Task OpenLaneAsync(string laneNo)
     {
-        bool result = _topologicalMap.OpenLane(laneNo);
-        if (result)
-            await ResetGraphAsync();
+        TopologicalMapLane? lane = _topologicalMap.OpenLane(laneNo);
+        if (lane != null)
+            await FetchTopologicalMapLaneActor(lane.LaneNo).OpenAsync();
     }
 
     /// <summary>

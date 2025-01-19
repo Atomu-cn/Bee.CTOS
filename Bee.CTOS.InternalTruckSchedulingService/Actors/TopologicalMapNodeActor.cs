@@ -37,10 +37,22 @@ public class TopologicalMapNodeActor : Actor, ITopologicalMapNodeActor
 
     #region 方法
 
+    protected override async Task OnActivateAsync()
+    {
+        await base.OnActivateAsync();
+        await RegisterTimerAsync();
+    }
+
     private ITopologicalMapActor FetchTopologicalMapActor()
     {
         ActorId actorId = new ActorId(_terminalNo);
         return this.ProxyFactory.CreateActorProxy<ITopologicalMapActor>(actorId, nameof(TopologicalMapActor));
+    }
+
+    private ITopologicalMapLaneActor FetchTopologicalMapLaneActor(string laneNo)
+    {
+        ActorId actorId = new ActorId($"{{\"TerminalNo\":\"{_terminalNo}\",\"LaneNo\":\"{laneNo}\"}}");
+        return this.ProxyFactory.CreateActorProxy<ITopologicalMapLaneActor>(actorId, nameof(TopologicalMapLaneActor));
     }
 
     #region AutoRun
@@ -70,6 +82,12 @@ public class TopologicalMapNodeActor : Actor, ITopologicalMapNodeActor
         if ( _exitLaneNos == null)
             _exitLaneNos = await mapActor.FindExitLaneNosAsync(_location);
 
+        if (_ownerLaneNos == null && _entryLaneNos == null && _exitLaneNos == null)
+        {
+            await UnRegisterTimerAsync();
+            return;
+        }
+
     }
     
     #endregion
@@ -77,15 +95,29 @@ public class TopologicalMapNodeActor : Actor, ITopologicalMapNodeActor
     #region API
 
     /// <summary>
-    /// 重置
+    /// 关停
     /// </summary>
-    public async Task ResetAsync()
+    public async Task ShutdownAsync()
     {
         await UnRegisterTimerAsync();
+        if (_ownerLaneNos != null)
+        {
+            List<Task> tasks = new List<Task>(_ownerLaneNos.Length);
+            foreach (string laneNo in _ownerLaneNos)
+                tasks.Add(Task.Run(() => FetchTopologicalMapLaneActor(laneNo).ResetAsync()));
+            await Task.WhenAll(tasks.ToArray());
+        }
+    }
+
+    /// <summary>
+    /// 重置
+    /// </summary>
+    public Task ResetAsync()
+    {
         _ownerLaneNos = null;
         _entryLaneNos = null;
         _exitLaneNos = null;
-        await RegisterTimerAsync();
+        return Task.CompletedTask;
     }
 
     #endregion

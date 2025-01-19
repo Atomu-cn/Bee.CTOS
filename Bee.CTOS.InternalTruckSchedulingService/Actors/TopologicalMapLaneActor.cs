@@ -9,7 +9,7 @@ namespace Bee.CTOS.InternalTruckSchedulingService.Actors;
 /// 拓扑地图车道（单向）
 /// ID: $"{{\"TerminalNo\":\"{terminalNo}\",\"LaneNo\":\"{laneNo}\"}}"
 /// </summary>
-public class TopologicalMapLaneActor : Actor, ITopologicalMapNodeActor
+public class TopologicalMapLaneActor : Actor, ITopologicalMapLaneActor
 {
     public TopologicalMapLaneActor(ActorHost host)
         : base(host)
@@ -26,7 +26,8 @@ public class TopologicalMapLaneActor : Actor, ITopologicalMapNodeActor
 
     private readonly string _terminalNo;
     private readonly string _laneNo;
-
+    
+    private bool _closed;
     private string[]? _ownerLaneNos;
     private string[]? _entryLaneNos;
     private string[]? _exitLaneNos;
@@ -76,6 +77,11 @@ public class TopologicalMapLaneActor : Actor, ITopologicalMapNodeActor
 
     #region API
 
+    public async Task ShutdownAsync()
+    {
+        throw new NotImplementedException();
+    }
+
     /// <summary>
     /// 重置
     /// </summary>
@@ -86,6 +92,18 @@ public class TopologicalMapLaneActor : Actor, ITopologicalMapNodeActor
         _entryLaneNos = null;
         _exitLaneNos = null;
         await RegisterTimerAsync();
+    }
+
+    public Task CloseAsync()
+    {
+        _closed = true;
+        return Task.CompletedTask;
+    }
+
+    public Task OpenAsync()
+    {
+        _closed = false;
+        return Task.CompletedTask;
     }
 
     #endregion

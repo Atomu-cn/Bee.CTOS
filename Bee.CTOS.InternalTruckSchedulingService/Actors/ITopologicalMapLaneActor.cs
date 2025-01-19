@@ -8,7 +8,22 @@ namespace Bee.CTOS.InternalTruckSchedulingService.Actors;
 public interface ITopologicalMapLaneActor : IActor
 {
     /// <summary>
+    /// 关停
+    /// </summary>
+    Task ShutdownAsync();
+
+    /// <summary>
     /// 重置
     /// </summary>
     Task ResetAsync();
+
+    /// <summary>
+    /// 禁止通行
+    /// </summary>
+    Task CloseAsync();
+
+    /// <summary>
+    /// 恢复通行
+    /// </summary>
+    Task OpenAsync();
 }
