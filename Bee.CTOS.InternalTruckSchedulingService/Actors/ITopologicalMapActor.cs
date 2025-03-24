@@ -14,6 +14,17 @@ public interface ITopologicalMapActor : IActor
     Task<TopologicalMap> FetchMapAsync();
 
     /// <summary>
+    /// 获取车道集合
+    /// </summary>
+    Task<TopologicalMapLane[]> FetchLanesAsync();
+
+    /// <summary>
+    /// 获取车道节点集合
+    /// </summary>
+    /// <param name="laneNo">车道编号</param>
+    Task<TopologicalMapNode[]?> FetchLaneNodesAsync(string laneNo);
+
+    /// <summary>
     /// Put节点
     /// </summary>
     /// <param name="location">位置（地图标记位置）</param>

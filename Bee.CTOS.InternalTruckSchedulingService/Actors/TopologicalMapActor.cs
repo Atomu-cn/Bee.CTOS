@@ -1,4 +1,3 @@
-using System.Numerics;
 using Bee.CTOS.InternalTruckSchedulingService.Models;
 using Dapr.Actors;
 using Dapr.Actors.Runtime;
@@ -47,24 +46,31 @@ public class TopologicalMapActor : Actor, ITopologicalMapActor
         await Task.WhenAll(tasks.ToArray());
     }
 
-    private async Task ResetGraphAsync()
-    {
-        List<Task> tasks = new List<Task>(_topologicalMap.NodeDict.Count + _topologicalMap.LaneDict.Count);
-        foreach (KeyValuePair<string, TopologicalMapNode> kvp in _topologicalMap.NodeDict)
-            tasks.Add(Task.Run(() => FetchTopologicalMapNodeActor(kvp.Value.Location).ResetAsync()));
-        foreach (KeyValuePair<string, TopologicalMapLane> kvp in _topologicalMap.LaneDict)
-            tasks.Add(Task.Run(() => FetchTopologicalMapLaneActor(kvp.Value.LaneNo).ResetAsync()));
-        await Task.WhenAll(tasks.ToArray());
-    }
-
     #region API
 
     /// <summary>
-    /// 创建或覆盖地图
+    /// 获取地图
     /// </summary>
     public Task<TopologicalMap> FetchMapAsync()
     {
         return Task.FromResult(_topologicalMap);
+    }
+
+    /// <summary>
+    /// 获取车道集合
+    /// </summary>
+    public Task<TopologicalMapLane[]> FetchLanesAsync()
+    {
+        return Task.FromResult(_topologicalMap.LaneDict.Values.ToArray());
+    }
+
+    /// <summary>
+    /// 获取车道节点集合
+    /// </summary>
+    /// <param name="laneNo">车道编号</param>
+    public Task<TopologicalMapNode[]?> FetchLaneNodesAsync(string laneNo)
+    {
+        return Task.FromResult(_topologicalMap.LaneDict.TryGetValue(laneNo, out TopologicalMapLane? result) ? result.NodeDict.Values.ToArray() : null);
     }
 
     /// <summary>

@@ -27,10 +27,32 @@ namespace Bee.CTOS.InternalTruckSchedulingService.Controllers
         /// <param name="terminalNo">码头编号</param>
         /// <returns>拓扑地图</returns>
         [HttpGet]
-        public ActionResult<TopologicalMap> Get(string terminalNo)
+        public async Task<ActionResult<TopologicalMap>> Get(string terminalNo)
         {
-            TopologicalMap? result = TopologicalMap.FetchRoot(p => p.TerminalNo == terminalNo);
-            return result != null ? result : NotFound();
+            return await FetchTopologicalMapActor(terminalNo).FetchMapAsync();
+        }
+
+        /// <summary>
+        /// 获取车道集合
+        /// </summary>
+        /// <param name="terminalNo">码头编号</param>
+        /// <returns>车道集合</returns>
+        [HttpGet("lanes")]
+        public async Task<ActionResult<TopologicalMapLane[]>> GetLanes(string terminalNo)
+        {
+            return await FetchTopologicalMapActor(terminalNo).FetchLanesAsync();
+        }
+
+        /// <summary>
+        /// 获取车道节点集合
+        /// </summary>
+        /// <param name="terminalNo">码头编号</param>
+        /// <param name="laneNo">车道编号</param>
+        /// <returns>节点集合</returns>
+        [HttpGet("lane-nodes")]
+        public async Task<ActionResult<TopologicalMapNode[]?>> GetLaneNodes(string terminalNo, string laneNo)
+        {
+            return await FetchTopologicalMapActor(terminalNo).FetchLaneNodesAsync(laneNo);
         }
 
         /// <summary>
