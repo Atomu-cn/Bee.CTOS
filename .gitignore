@@ -369,4 +369,3 @@ FodyWeavers.xsd
 /Bin_ORA
 /Bin_PgSQL
 /Phenix.StorageAlgorithm.sln
-/Phenix.StorageAlgorithm/TransportTask/AffiliatedRelationsState.cs
