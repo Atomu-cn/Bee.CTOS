@@ -61,7 +61,7 @@
     </TypeIdentifier>
   </Enum>
   <Enum Name="Bee.CTOS.InternalTruckSchedulingService.Models.TruckLoadingPosition">
-    <Position X="7.25" Y="2.25" Width="2" />
+    <Position X="7.5" Y="2.25" Width="2" />
     <TypeIdentifier>
       <HashCode>AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAA=</HashCode>
       <FileName>Models\TruckLoadingPosition.cs</FileName>

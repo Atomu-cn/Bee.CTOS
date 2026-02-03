@@ -1,9 +1,7 @@
 Phenix.NET7
-Copyright © 2007, 2025 Phenixヾ Studio
+Copyright © 2007, 2026 Phenixヾ Studio
 使用开发框架的目的，首要的是对软件过程的有效管控，让团队保持一致的编写风格，提升协作效率、开发速度和代码质量，保证软件产品的可维护性
 
-发布地址：https://github.com/phenixiii/Phenix.NET7
-技术交流群：206648373
 
 20190522
 1，发布轻量级的持久化引擎，支持Oracle、MySQL（20200510后支持PostgreSQL，20200707后支持SQL Server），封装ADO.NET，可同时操作多个（主库+分库）数据库
@@ -259,3 +257,9 @@ AppSettings存取的配置值，向前兼容不了的时候可以通过升版本
 
 20241223
 整理ExceptionHandlerMiddleware代码逻辑
+
+
+20260203
+升级至 for .net 10，开发工具 Visual Studio 2026
+
+
