@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Bee.CTOS.PreShipmentRestacking.Abstractions\Bee.CTOS.PreShipmentRestacking.Abstractions.csproj" />
+    <ProjectReference Include="..\Bee.CTOS.PreShipmentRestacking.Infrastructure\Bee.CTOS.PreShipmentRestacking.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
