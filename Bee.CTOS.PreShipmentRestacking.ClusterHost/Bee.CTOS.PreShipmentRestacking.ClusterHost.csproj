@@ -5,17 +5,33 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <PublishAot>true</PublishAot>
-    <InvariantGlobalization>true</InvariantGlobalization>
+    <!-- 确保以下设置为 false -->
+    <PublishAot>false</PublishAot>
+    <InvariantGlobalization>false</InvariantGlobalization>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Orleans.Server" Version="10.0.1" />
+	  <PackageReference Include="Microsoft.Orleans.Server" Version="10.0.1" />
+	  <PackageReference Include="Serilog.Extensions.Hosting" Version="10.0.0" />
+	  <PackageReference Include="Serilog.Settings.Configuration" Version="10.0.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Bee.CTOS.PreShipmentRestacking.Abstractions\Bee.CTOS.PreShipmentRestacking.Abstractions.csproj" />
     <ProjectReference Include="..\Bee.CTOS.PreShipmentRestacking.Actors\Bee.CTOS.PreShipmentRestacking.Actors.csproj" />
-    <ProjectReference Include="..\Bee.CTOS.PreShipmentRestacking.Infrastructure\Bee.CTOS.PreShipmentRestacking.Infrastructure.csproj" />
+    <ProjectReference Include="..\Bee.CTOS.PreShipmentRestacking.Domain\Bee.CTOS.PreShipmentRestacking.Domain.csproj" />
+    <ProjectReference Include="..\Phenix.Core\Phenix.Core_PgSQL.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+	
+  <!--<PropertyGroup>
+	<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+	<CompilerGeneratedFilesOutputPath>Generated</CompilerGeneratedFilesOutputPath>
+  </PropertyGroup>-->
 
 </Project>
