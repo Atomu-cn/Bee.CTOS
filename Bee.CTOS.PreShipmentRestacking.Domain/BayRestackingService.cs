@@ -136,8 +136,8 @@ namespace Bee.CTOS.PreShipmentRestacking.Domain
             int[] topTiers = (int[])initialTopTiers.Clone();
             int[] fixedTiers = new int[limitRow + 1]; //各排固定层（弃用0下标）
 
-            List<int> emptyRowList = new List<int>(limitRow); //无箱排
             List<int> peakRowList = new List<int>(limitRow); //超高峰
+            List<int> emptyRowList = new List<int>(limitRow); //无箱排
             List<int> safeRowList = new List<int>(limitRow); //安全排
             List<int> troughRowList = new List<int>(limitRow); //超低谷
             List<int> ascRowList = new List<int>(limitRow + 1); //顺堆排
