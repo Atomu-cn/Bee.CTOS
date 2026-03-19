@@ -21,7 +21,7 @@ namespace Bee.CTOS.PreShipmentRestacking.Domain
         }
 
         private static void GroupRow(int row, int limitRow, int limitTier, int[] topTiers, BayContainer?[,] bayMatrix,
-            ref List<int> peakRowList, ref List<int> emptyRowList, ref List<int> safeRowList, ref List<int> troughRowList, bool needSort = true)
+            ref List<int> peakRowList, ref List<int> emptyRowList, ref List<int> safeRowList, ref List<int> troughRowList)
         {
             peakRowList.Remove(row);
             emptyRowList.Remove(row);
@@ -35,37 +35,25 @@ namespace Bee.CTOS.PreShipmentRestacking.Domain
             if (leftGap > 2 || rightGap > 2 ||
                 row == 0 && topTiers[row] > 0 ||
                 row == 1 && topTiers[row] > 3)
-            {
                 peakRowList.Add(row);
-                if (needSort)
-                    peakRowList.Sort();
-            }
 
             if (row == 0)
                 return;
 
             if (topTiers[row] == 0)
-            {
                 emptyRowList.Add(row);
-                if (needSort)
-                    emptyRowList.Sort();
-            }
 
             if (topTiers[row] < (row == limitRow ? limitTier + 1 : limitTier))
                 if (row > 1 && leftGap < 2 && rightGap < 2 ||
                     row == 1 && topTiers[row] < 3)
-                {
                     safeRowList.Add(row);
-                    if (needSort)
-                        safeRowList.Sort();
-                }
 
             if (leftGap < -2 || rightGap < -2)
                 troughRowList.Add(row);
         }
 
         private static void GroupRow(int row, int[] fixedTiers, int[] topTiers, BayContainer?[,] bayMatrix,
-            ref List<int> ascRowList, ref List<int> descRowList, ref List<int> singleRowList, bool needSort = true)
+            ref List<int> ascRowList, ref List<int> descRowList, ref List<int> singleRowList)
         {
             if (row == 0)
                 return;
@@ -81,18 +69,10 @@ namespace Bee.CTOS.PreShipmentRestacking.Domain
                 if (diff > 0)
                 {
                     if (equally)
-                    {
                         descRowList.Add(row);
-                        if (needSort)
-                            descRowList.Sort();
-                    }
 
                     if (topTiers[row] == fixedTiers[row] + 1)
-                    {
                         singleRowList.Add(row);
-                        if (needSort)
-                            singleRowList.Sort();
-                    }
 
                     return;
                 }
@@ -106,21 +86,13 @@ namespace Bee.CTOS.PreShipmentRestacking.Domain
                 if (row == 1 && topTiers[row] >= 3)
                 {
                     descRowList.Add(row);
-                    if (needSort)
-                        descRowList.Sort();
                     return;
                 }
 
                 ascRowList.Add(row);
-                if (needSort)
-                    ascRowList.Sort();
 
                 if (topTiers[row] == 1 && fixedTiers[row] == 0)
-                {
                     singleRowList.Add(row);
-                    if (needSort)
-                        singleRowList.Sort();
-                }
             }
         }
 
@@ -134,6 +106,14 @@ namespace Bee.CTOS.PreShipmentRestacking.Domain
                     GroupRow(r, limitRow, limitTier, topTiers, bayMatrix, ref peakRowList, ref emptyRowList, ref safeRowList, ref troughRowList);
             GroupRow(operation.ReadyRow, fixedTiers, topTiers, bayMatrix, ref ascRowList, ref descRowList, ref singleRowList);
             GroupRow(operation.UnderRow, fixedTiers, topTiers, bayMatrix, ref ascRowList, ref descRowList, ref singleRowList);
+
+            peakRowList.Sort();
+            emptyRowList.Sort();
+            safeRowList.Sort();
+            troughRowList.Sort();
+            ascRowList.Sort();
+            descRowList.Sort();
+            singleRowList.Sort();
         }
 
         private static bool HaveNonAscRow(int limitRow, IList<int> ascRowList)
@@ -167,8 +147,8 @@ namespace Bee.CTOS.PreShipmentRestacking.Domain
             //标记顺堆排、逆堆排、超高峰、安全排、超低谷、无箱排、单箱排
             for (int r = 1; r <= limitRow; r++)
             {
-                GroupRow(r, limitRow, limitTier, topTiers, bayMatrix, ref peakRowList, ref emptyRowList, ref safeRowList, ref troughRowList, false);
-                GroupRow(r, fixedTiers, topTiers, bayMatrix, ref ascRowList, ref descRowList, ref singleRowList, false);
+                GroupRow(r, limitRow, limitTier, topTiers, bayMatrix, ref peakRowList, ref emptyRowList, ref safeRowList, ref troughRowList);
+                GroupRow(r, fixedTiers, topTiers, bayMatrix, ref ascRowList, ref descRowList, ref singleRowList);
             }
 
             //遍历发箱序号从大到小排列的集装箱逆序清单，逐一作为当前箱处理为固定箱，直到所有都标记为固定箱
