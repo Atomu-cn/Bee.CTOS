@@ -12,7 +12,7 @@
     /// 本接口包含用于编码/解码由行数与层数组合而成的 long 类型 key 的静态工具方法，便于在 Grain 分区或标识中传递限制值。
     /// </para>
     /// </remarks>
-    public interface IBayRestackingGrain : IGrainWithIntegerKey
+    public interface IBayRestackingGrain : IGrainWithIntegerCompoundKey
     {
         #region 方法
 

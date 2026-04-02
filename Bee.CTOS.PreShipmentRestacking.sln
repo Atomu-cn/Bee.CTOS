@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bee.CTOS.PreShipmentRestack
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bee.CTOS.PreShipmentRestacking.Agent", "Bee.CTOS.PreShipmentRestacking.Agent\Bee.CTOS.PreShipmentRestacking.Agent.csproj", "{E46BCDFA-B9B4-4C8A-B0E4-5608446900F9}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "解决方案项", "解决方案项", "{8AAC7859-1D66-483B-A955-7B578711C960}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

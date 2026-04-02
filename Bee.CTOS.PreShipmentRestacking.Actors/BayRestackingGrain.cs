@@ -23,7 +23,7 @@ namespace Bee.CTOS.PreShipmentRestacking.Actors
             _logger = logger;
             _bayRestackingService = bayRestackingService;
 
-            long key = this.GetPrimaryKeyLong();
+            long key = this.GetPrimaryKeyLong(out string? _bay);
             (_limitRow, _limitTier) = IBayRestackingGrain.SplitKey(key);
         }
 
@@ -40,6 +40,11 @@ namespace Bee.CTOS.PreShipmentRestacking.Actors
         /// 由依赖注入提供并在构造函数中初始化；用于在 ExecuteAsync 中委托实际计算。
         /// </summary>
         private readonly IBayRestackingService _bayRestackingService;
+
+        /// <summary>
+        /// 当前 Actor 负责的贝位（bay）标识。
+        /// </summary>
+        private readonly string? _bay;
 
         /// <summary>
         /// 当前 Actor 负责的行（row）限制（由 Actor 主键解析得到的行数或行索引上限）。

@@ -59,7 +59,7 @@ namespace Bee.CTOS.PreShipmentRestacking.Client
             int limitRow = 6;
             int limitTier = 5;
 
-            IBayRestackingGrain grain = client.GetGrain<IBayRestackingGrain>(IBayRestackingGrain.CombineKey(limitRow, limitTier));
+            IBayRestackingGrain grain = client.GetGrain<IBayRestackingGrain>(IBayRestackingGrain.CombineKey(limitRow, limitTier), "B01");
 
             Console.WriteLine("**** 演示 PreShipmentRestacking 功能 ****");
             Console.WriteLine();
