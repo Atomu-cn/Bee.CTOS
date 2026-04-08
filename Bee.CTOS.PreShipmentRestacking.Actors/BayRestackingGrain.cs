@@ -75,15 +75,15 @@ namespace Bee.CTOS.PreShipmentRestacking.Actors
             }
         }
 
-        async Task<MoveOperation[]> IBayRestackingGrain.ExecuteBayRestackingAsync(IList<ContainerLocation> initialLocations, IDictionary<string, int> deliveryOrderDict)
+        async Task<MoveOperation[]> IBayRestackingGrain.ExecuteBayRestackingAsync(string ownerId, IList<ContainerLocation> initialLocations, IDictionary<string, int> deliveryOrderDict)
         {
             try
             {
-                return await _bayRestackingService.ExecuteBayRestackingAsync(_limitRow, _limitTier, initialLocations, deliveryOrderDict);
+                return await _bayRestackingService.ExecuteBayRestackingAsync(ownerId, _limitRow, _limitTier, initialLocations, deliveryOrderDict);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Execute failed for (limitRow = {_limitRow} & limitTier = {_limitTier})");
+                _logger.LogError(ex, $"Execute failed for (ownerId = {ownerId}，limitRow = {_limitRow} & limitTier = {_limitTier})");
                 throw;
             }
         }

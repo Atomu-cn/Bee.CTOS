@@ -9,8 +9,11 @@
         /// <summary>
         /// 初始化
         /// </summary>
-        public MoveOperation(string containerNo, int readyRow, int underRow, int fixingOrdinal, bool isFixed, int currentRow, int targetRow, string remark)
+        public MoveOperation(string id, string ownerId, int index, string containerNo, int readyRow, int underRow, int fixingOrdinal, bool isFixed, int currentRow, int targetRow, string remark)
         {
+            _id = id;
+            _ownerId = ownerId;
+            _index = index;
             _containerNo = containerNo;
             _readyRow = readyRow;
             _underRow = underRow;
@@ -24,92 +27,93 @@
         #region 属性
 
         [Id(0)]
+        private readonly string _id;
+
+        /// <summary>
+        /// ID
+        /// </summary>
+        public string Id => _id;
+
+        [Id(1)]
+        private readonly string _ownerId;
+
+        /// <summary>
+        /// 所属翻箱ID（一组翻箱动作的唯一标识）
+        /// </summary>
+        public string OwnerId => _ownerId;
+
+        [Id(2)]
+        private readonly int _index;
+
+        /// <summary>
+        /// 动作在序列中的序号
+        /// </summary>
+        public int Index => _index;
+
+        [Id(3)]
         private readonly string _containerNo;
 
         /// <summary>
         /// 箱号
         /// </summary>
-        public string ContainerNo
-        {
-            get { return _containerNo; }
-        }
+        public string ContainerNo => _containerNo;
 
-        [Id(1)]
+
+        [Id(4)]
         private int _readyRow;
 
         /// <summary>
         /// 翻出排
         /// </summary>
-        public int ReadyRow
-        {
-            get { return _readyRow; }
-        }
+        public int ReadyRow => _readyRow;
 
-        [Id(2)]
+        [Id(5)]
         private int _underRow;
 
         /// <summary>
         /// 翻入排
         /// </summary>
-        public int UnderRow
-        {
-            get { return _underRow; }
-        }
+        public int UnderRow => _underRow;
 
-        [Id(3)]
+        [Id(6)]
         private readonly int _fixingOrdinal;
 
         /// <summary>
         /// 固定序号
         /// </summary>
-        public int FixingOrdinal
-        {
-            get { return _fixingOrdinal; }
-        }
+        public int FixingOrdinal => _fixingOrdinal;
 
-        [Id(4)]
+        [Id(7)]
         private readonly bool _isFixed;
 
         /// <summary>
         /// 是否固定
         /// </summary>
-        public bool IsFixed
-        {
-            get { return _isFixed; }
-        }
+        public bool IsFixed => _isFixed;
 
-        [Id(5)]
+        [Id(8)]
         private readonly int _currentRow;
 
         /// <summary>
         /// 当前排
         /// </summary>
-        public int CurrentRow
-        {
-            get { return _currentRow; }
-        }
+        public int CurrentRow => _currentRow;
 
-        [Id(6)]
+        [Id(9)]
         private readonly int _targetRow;
 
         /// <summary>
         /// 目的排
         /// </summary>
-        public int TargetRow
-        {
-            get { return _targetRow; }
-        }
+        public int TargetRow => _targetRow;
 
-        [Id(7)]
+        [Id(10)]
         private string _remark;
 
         /// <summary>
         /// 备注
         /// </summary>
-        public string Remark
-        {
-            get { return _remark; }
-        }
+        public string Remark => _remark;
 
         #endregion
 
@@ -135,7 +139,7 @@
         public void MergeNext(MoveOperation nextOperation)
         {
             _underRow = nextOperation._underRow;
-            _remark = _remark + " -> (" + ((MoveOperation)nextOperation)._readyRow + ") -> " + ((MoveOperation)nextOperation)._remark;
+            _remark = _remark + " -> (" + nextOperation._readyRow + ") -> " + nextOperation._remark;
         }
 
         #endregion

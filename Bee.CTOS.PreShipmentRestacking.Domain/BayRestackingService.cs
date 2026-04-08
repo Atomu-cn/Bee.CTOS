@@ -124,7 +124,7 @@ namespace Bee.CTOS.PreShipmentRestacking.Domain
             return false;
         }
 
-        Task<MoveOperation[]> IBayRestackingService.ExecuteBayRestackingAsync(int limitRow, int limitTier, IList<ContainerLocation> initialLocations, IDictionary<string, int> deliveryOrderDict)
+        Task<MoveOperation[]> IBayRestackingService.ExecuteBayRestackingAsync(string ownerId, int limitRow, int limitTier, IList<ContainerLocation> initialLocations, IDictionary<string, int> deliveryOrderDict)
         {
             List<MoveOperation> result = new List<MoveOperation>();
             //获取贝内所有集装箱的箱位记录及装船发箱顺序，按照发箱顺序递增标记发箱序号，起始号1
@@ -133,6 +133,7 @@ namespace Bee.CTOS.PreShipmentRestacking.Domain
                 return Task.FromResult(result.ToArray());
 
             MoveOperation? operation = null;
+            int operationIndex = 1;
             int[] topTiers = (int[])initialTopTiers.Clone();
             int[] fixedTiers = new int[limitRow + 1]; //各排固定层（弃用0下标）
 
@@ -447,8 +448,9 @@ namespace Bee.CTOS.PreShipmentRestacking.Domain
                         //将待翻箱翻入选择的排
                         //翻动后，将当前翻箱动作登记到翻箱操作步骤中
                         //翻动后，标记顺堆排、逆堆排、超高峰、安全排、超低谷、无箱排、单箱排
-                        operation = readyContainer.MoveTo(underRow, currentContainer.DeliveryOrdinal, currentContainer.Row, targetRow, limitRow, ref fixedTiers, ref topTiers, ref bayMatrix, remark);
+                        operation = readyContainer.MoveTo(ownerId, operationIndex, underRow, currentContainer.DeliveryOrdinal, currentContainer.Row, targetRow, limitRow, ref fixedTiers, ref topTiers, ref bayMatrix, remark);
                         result.Add(operation);
+                        operationIndex = operationIndex + 1;
                         GroupRow(operation, limitRow, limitTier, fixedTiers, topTiers, bayMatrix, ref peakRowList, ref emptyRowList, ref safeRowList, ref troughRowList, ref ascRowList, ref descRowList, ref singleRowList);
 
                         //如果贝内除了最外排，其他全都是顺堆排或无箱排，则不再继续翻动
@@ -481,8 +483,9 @@ namespace Bee.CTOS.PreShipmentRestacking.Domain
                 //将当前箱翻入目标排，并标记为固定箱
                 //翻动后，将当前翻箱动作登记到翻箱操作步骤中
                 //翻动后，标记顺堆排、逆堆排、超高峰、安全排、超低谷、无箱排、单箱排
-                operation = currentContainer.MoveTo(targetRow, currentContainer.DeliveryOrdinal, currentContainer.Row, targetRow, limitRow, ref fixedTiers, ref topTiers, ref bayMatrix, "将当前箱翻入目标排，并标记为固定箱");
+                operation = currentContainer.MoveTo(ownerId, operationIndex, targetRow, currentContainer.DeliveryOrdinal, currentContainer.Row, targetRow, limitRow, ref fixedTiers, ref topTiers, ref bayMatrix, "将当前箱翻入目标排，并标记为固定箱");
                 result.Add(operation);
+                operationIndex = operationIndex + 1;
                 GroupRow(operation, limitRow, limitTier, fixedTiers, topTiers, bayMatrix, ref peakRowList, ref emptyRowList, ref safeRowList, ref troughRowList, ref ascRowList, ref descRowList, ref singleRowList);
                 
                 //继续遍历，
@@ -576,6 +579,7 @@ namespace Bee.CTOS.PreShipmentRestacking.Domain
                     //舍弃翻入排号和翻出排号相同的翻箱动作
                     if (operation0.ReadyRow == operation0.UnderRow)
                     {
+                        operation0.MergeNext(operation0);
                         result.Remove(operation0);
                         continue;
                     }

@@ -81,6 +81,9 @@
         /// <summary>
         /// 计算并返回对单个贝进行重排（翻箱）的动作序列，以满足给定的发箱顺序约束。
         /// </summary>
+        /// <param name="ownerId">
+        /// 所属翻箱ID。
+        /// </param>
         /// <param name="limitRow">
         /// 排数上限。表示允许的最大排号（方法内部一般按 0..limitRow 的范围处理，0 为最外排的车道）。
         /// </param>
@@ -96,7 +99,7 @@
         /// <returns>
         /// 按执行顺序排列的翻箱动作列表，元素实现 <see cref="MoveOperation"/>。
         /// </returns>
-        Task<MoveOperation[]> ExecuteBayRestackingAsync(IList<ContainerLocation> initialLocations, IDictionary<string, int> deliveryOrderDict);
+        Task<MoveOperation[]> ExecuteBayRestackingAsync(string ownerId, IList<ContainerLocation> initialLocations, IDictionary<string, int> deliveryOrderDict);
 
         #endregion
     }

@@ -161,8 +161,9 @@ namespace Bee.CTOS.PreShipmentRestacking.Client
                 try
                 {
                     DateTime startTime = DateTime.Now;
-                    IList<MoveOperation> operations = await grain.ExecuteBayRestackingAsync(initialLocations, deliveryOrderDict);
-                    Console.WriteLine($"耗时{DateTime.Now.Subtract(startTime).TotalMilliseconds}毫秒 步数：{operations.Count}，压箱数：{impededCount}，超 {operations.Count - impededCount} 步。 {(operations.Count - impededCount <= 0 ? "(￣▽￣)\"" : "")}");
+                    string ownerId = Guid.NewGuid().ToString("N");
+                    IList<MoveOperation> operations = await grain.ExecuteBayRestackingAsync(ownerId, initialLocations, deliveryOrderDict);
+                    Console.WriteLine($"{ownerId}耗时{DateTime.Now.Subtract(startTime).TotalMilliseconds}毫秒 步数：{operations.Count}，压箱数：{impededCount}，超 {operations.Count - impededCount} 步。 {(operations.Count - impededCount <= 0 ? "(￣▽￣)\"" : "")}");
                     Console.WriteLine("步骤如下：");
                     Console.WriteLine();
 
