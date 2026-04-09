@@ -9,11 +9,11 @@
         /// <summary>
         /// 初始化
         /// </summary>
-        public MoveOperation(string id, string ownerId, int index, string containerNo, int readyRow, int underRow, int fixingOrdinal, bool isFixed, int currentRow, int targetRow, string remark)
+        public MoveOperation(string id, string ownerId, int operationIndex, string containerNo, int readyRow, int underRow, int fixingOrdinal, bool isFixed, int currentRow, int targetRow, string remark)
         {
             _id = id;
             _ownerId = ownerId;
-            _index = index;
+            _operationIndex = operationIndex;
             _containerNo = containerNo;
             _readyRow = readyRow;
             _underRow = underRow;
@@ -38,17 +38,17 @@
         private readonly string _ownerId;
 
         /// <summary>
-        /// 所属翻箱ID（一组翻箱动作的唯一标识）
+        /// 所属翻箱ID
         /// </summary>
         public string OwnerId => _ownerId;
 
         [Id(2)]
-        private readonly int _index;
+        private readonly int _operationIndex;
 
         /// <summary>
-        /// 动作在序列中的序号
+        /// 动作序号
         /// </summary>
-        public int Index => _index;
+        public int OperationIndex => _operationIndex;
 
         [Id(3)]
         private readonly string _containerNo;
@@ -57,7 +57,6 @@
         /// 箱号
         /// </summary>
         public string ContainerNo => _containerNo;
-
 
         [Id(4)]
         private int _readyRow;
@@ -130,6 +129,7 @@
             int oldMomentRow = _underRow;
             _underRow = newMomentRow;
             nextOperation._readyRow = newMomentRow;
+
             _remark = _remark + "(" + oldMomentRow + " -> " + newMomentRow + ")";
         }
 
@@ -139,6 +139,7 @@
         public void MergeNext(MoveOperation nextOperation)
         {
             _underRow = nextOperation._underRow;
+
             _remark = _remark + " -> (" + nextOperation._readyRow + ") -> " + nextOperation._remark;
         }
 

@@ -287,7 +287,7 @@ namespace Bee.CTOS.PreShipmentRestacking.Domain
         /// <summary>
         /// 翻入
         /// </summary>
-        public MoveOperation MoveTo(string ownerId, int index, int underRow, int fixingOrdinal, int currentRow, int targetRow, int limitRow, ref int[] fixedTiers, ref int[] topTiers, ref BayContainer?[,] bayMatrix, string remark)
+        public MoveOperation MoveTo(string ownerId, int operationIndex, int underRow, int fixingOrdinal, int currentRow, int targetRow, int limitRow, ref int[] fixedTiers, ref int[] topTiers, ref BayContainer?[,] bayMatrix, string remark)
         {
             if (_tier < topTiers[_row])
                 throw new InvalidOperationException("无法翻动" + _row + "排第" + _tier + "层的箱（被" + (topTiers[_row] - _tier) + "只箱压着呢）!");
@@ -305,7 +305,7 @@ namespace Bee.CTOS.PreShipmentRestacking.Domain
             //翻动后的同号箱尝试标记为固定箱
             bool isFixed = TryFix(fixingOrdinal, limitRow, ref fixedTiers, topTiers, bayMatrix);
             //返回翻箱动作
-            return new MoveOperation(Guid.NewGuid().ToString("N"), ownerId, index, _initialLocation.ContainerNo, readyRow, underRow, fixingOrdinal, isFixed, currentRow, targetRow, remark);
+            return new MoveOperation(Guid.NewGuid().ToString("N"), ownerId, operationIndex, _initialLocation.ContainerNo, readyRow, underRow, fixingOrdinal, isFixed, currentRow, targetRow, remark);
         }
 
         /// <summary>
